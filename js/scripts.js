@@ -18,21 +18,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function eventHandler(event) {
-    let id = parseInt(event.target.dataset.id);
+    let listId = parseInt(event.target.dataset.listid);
+    let iconId = parseInt(event.target.dataset.iconid);
     switch (event.target.tagName) {
       case "LI":
-        toggleCompletion(id);
+        toggleCompletion(listId);
         break;
-      case "A":
-        removeTask(id);
+      case "I":
+        removeTask(iconId);
         break;
     }
   }
 
   function removeTask(id) {
-    todos.forEach(function (li) {
+    todos.forEach(function (li, index) {
       if (li.id === id) {
         // REMOVE LI FROM UL
+        todos.splice(index, 1);
       }
     });
     renderList();
@@ -50,10 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function addTask(event) {
     event.preventDefault();
-    newId++;
 
     const newTask = {
-      id: newId,
+      id: newId++,
       task: taskInput.value,
       completed: false,
     };
@@ -70,18 +71,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderList() {
     taskList.innerHTML = "";
 
-    todos.forEach(function(task) {
-      const li = document.createElement("li");
+    todos.forEach(function(item) {
+      const li = `<li class="list-group-item ${item.completed ? 'completed' : ''}" data-listId="${item.id}">${item.task}<i class="fas fa-trash-can fa-fw" data-iconId="${item.id}"></i></li>`
 
-      li.textContent = task.task;
-      li.setAttribute("data-id", task.id);
-      li.classList.add('list-group-item');
+      li.textContent = item.task;
 
-      // PERHAPS USE CSS INSTEAD
-      if (task.completed)
-        li.style.textDecoration = 'line-through';
-
-      taskList.appendChild(li);
+      taskList.innerHTML += li;
     });
   }
 });
