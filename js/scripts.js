@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
       else {
         submitButton.disabled = true;
       }
-
     }
 
     function addTask(event) {
@@ -28,13 +27,23 @@ document.addEventListener("DOMContentLoaded", function() {
           completed: false
         }
 
+        taskInput.value = '';
+        activateSubmitButton();
+
         todos.push(newTask);
         renderList(todos);
     }
 
+    function removeTask(id) {
+      todos.forEach(function(li) {
+        if (li.id === id)
+          
+      })
+    }
+
     function renderList(todos) {
       taskList.innerHTML = '';
-      
+
       todos.forEach(function(item) {
         const li = document.createElement("li");
 
@@ -42,6 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
         taskList.appendChild(li);
       });
 
-      console.log("LOG TODOS: ", todos)
-    }   
+      // console.log("LOG TODOS: ", todos)
+    }
 });
