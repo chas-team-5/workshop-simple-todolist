@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", function() {
     let newId = 0;
 
     submitButton.addEventListener('click', addTask);
+    taskInput.addEventListener('keyup', activateSubmitButton);
+
+    function activateSubmitButton() {
+      if (taskInput.checkValidity()) {
+        submitButton.disabled = false;
+      }
+      else {
+        submitButton.disabled = true;
+      }
+
+    }
 
     function addTask(event) {
         event.preventDefault();
