@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       li.textContent = task.task;
       li.setAttribute("data-id", task.id);
+      // li.classList.add('list-group-item');
 
       // PERHAPS USE CSS INSTEAD
       if (task.completed)
