@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         li.textContent = item.task;
         li.setAttribute('data-id', item.id);
+        li.classList.add('list-group-item');
 
         if (item.completed) {
           li.style.textDecoration = 'line-through';
