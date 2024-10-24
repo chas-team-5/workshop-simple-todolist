@@ -1,76 +1,86 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const submitButton = document.getElementById('submitButton');
-    const taskInput = document.getElementById('taskInput');
-    const taskList = document.getElementById('taskList');
-    const todos = [];
-    let newId = 0;
+document.addEventListener("DOMContentLoaded", function () {
+  const submitButton = document.getElementById("submitButton");
+  const taskInput = document.getElementById("taskInput");
+  const taskList = document.getElementById("taskList");
+  const todos = [];
+  let newId = 0;
 
-    submitButton.addEventListener('click', addTask);
-    taskInput.addEventListener('keyup', activateSubmitButton);
+  submitButton.addEventListener("click", addTask);
+  taskInput.addEventListener("keyup", activateSubmitButton);
+  taskList.addEventListener("click", eventHandler);
 
-    function activateSubmitButton() {
-      if (taskInput.checkValidity()) {
-        submitButton.disabled = false;
+  function activateSubmitButton() {
+    if (taskInput.checkValidity()) {
+      submitButton.disabled = false;
+    } else {
+      submitButton.disabled = true;
+    }
+  }
+
+  function eventHandler(event) {
+    let id = parseInt(event.target.dataset.id);
+    switch (event.target.tagName) {
+      case "LI":
+        toggleCompletion(id);
+        break;
+      case "A":
+        removeTask(id);
+        break;
+    }
+  }
+
+  function removeTask(id) {
+    todos.forEach(function (li) {
+      if (li.id === id) {
+        // REMOVE LI FROM UL
       }
-      else {
-        submitButton.disabled = true;
+    });
+    renderList();
+  }
+
+  function toggleCompletion(id) {
+    todos.forEach(function (task) {
+      if (task.id === id) {
+        // TOGGLE COMPLETION
+        task.completed = !task.completed;
       }
-    }
+    });
+    renderList();
+  }
 
-    function addTask(event) {
-        event.preventDefault();
-        newId++;
+  function addTask(event) {
+    event.preventDefault();
+    newId++;
 
-        const newTask = {
-          id: newId,
-          task: taskInput.value,
-          completed: false
-        }
+    const newTask = {
+      id: newId,
+      task: taskInput.value,
+      completed: false,
+    };
 
-        taskInput.value = '';
-        activateSubmitButton();
+    taskInput.value = "";
+    activateSubmitButton();
 
-        todos.push(newTask);
-        renderList(todos);
+    todos.push(newTask);
+    renderList();
 
-        taskInput.value = '';
-    }
+    taskInput.value = "";
+  }
 
-    function removeTask(id) {
-      todos.forEach(function(li) {
-        if (li.id === id)
-          
-      })
-    }
+  function renderList() {
+    taskList.innerHTML = "";
 
-    function renderList(todos) {
-      taskList.innerHTML = '';
+    todos.forEach(function(task) {
+      const li = document.createElement("li");
 
-      todos.forEach(function(item) {
-        const li = document.createElement("li");
+      li.textContent = task.task;
+      li.setAttribute("data-id", task.id);
 
-        li.textContent = item.task;
-        li.setAttribute('data-id', item.id);
+      // PERHAPS USE CSS INSTEAD
+      if (task.completed)
+        li.style.textDecoration = 'line-through';
 
-        if (item.completed) {
-          li.style.textDecoration = 'line-through';
-        }
-
-        li.addEventListener('click', function() {
-          toggleCompletion(item.id, li);
-        });
-        
-        function toggleCompletion(id, li) {
-          const task = todos.find(task => task.id === id);
-          if (task) {
-            task.completed = !task.completed;
-            li.style.textDecoration = task.completed ? 'line-through' : 'none'; 
-          }
-        }
-        
-        taskList.appendChild(li);
-      });
-
-      // console.log("LOG TODOS: ", todos)
-    }
+      taskList.appendChild(li);
+    });
+  }
 });
