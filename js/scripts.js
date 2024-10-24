@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         todos.push(newTask);
         renderList(todos);
+
+        taskInput.value = '';
     }
 
     function renderList(todos) {
@@ -28,6 +30,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const li = document.createElement("li");
 
         li.textContent = item.task;
+        li.setAttribute('data-id', item.id);
+
+        if (item.completed) {
+          li.style.textDecoration = 'line-through';
+        }
+
+        li.addEventListener('click', function() {
+          toggleCompletion(item.id, li);
+        });
+        
+        function toggleCompletion(id, li) {
+          const task = todos.find(task => task.id === id);
+          if (task) {
+            task.completed = !task.completed;
+            li.style.textDecoration = task.completed ? 'line-through' : 'none'; 
+          }
+        }
+        
         taskList.appendChild(li);
       });
 
